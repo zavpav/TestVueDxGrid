@@ -6,3 +6,6 @@
 /TestApi/TestApi/bin/Debug/net6.0
 *.sqlite
 /TestApi/TestApi/obj
+/.vs/TestVueDxGrid/v17/.suo
+*.user
+/.vs/VSWorkspaceState.json
