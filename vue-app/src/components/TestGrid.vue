@@ -19,7 +19,7 @@
         />
         <DxPager
             :visible="true"
-            :allowed-page-sizes=10
+            :allowed-page-sizes="4"
         />
 
             <!-- :display-mode="displayMode"
@@ -65,6 +65,9 @@ import { DxDataGrid, DxColumn,
     DxRemoteOperations,
     DxScrolling,
     DxGroupPanel,
+    DxPager,
+    DxGrouping,
+    DxPaging
     } from "devextreme-vue/data-grid"
 
 import CustomStore from 'devextreme/data/custom_store';
@@ -78,18 +81,34 @@ class UContext {
     user_id? : number;
     org_id? : number;
     year? : number;
+
+    constructor({user_id, org_id, year} : 
+                {user_id? : number,
+                    org_id? : number,
+                    year? : number})
+    {
+        this.user_id = user_id;
+        this.org_id = org_id;
+        this.year = year;
+    }
+
+    public fillObjAsField (obj : any) : void {
+        if (this.user_id != null)
+            obj.user_context_user_id = this.user_id;
+        if (this.org_id != null)
+            obj.user_context_org_id = this.org_id;
+        if (this.year != null)
+            obj.user_context_year = this.year;
+    }
 }
+let cntx = new UContext({user_id: 123, org_id: 123, year: 2020});
 
-let cntx ={
-    user_id: 123,
-    org_id: 123,
-    year: 2020
-};
+let cntx2 = Object.assign(new UContext({}), {
+                                    user_id: 123,
+                                    org_id: 123,
+                                    year: 2020
+                                });
 
-let cntx2 = new UContext();
-cntx2.org_id = 123;
-cntx2.user_id = 321;
-cntx2.year = 2020;
 
 let stor = AspNetData.createStore({
             key: 'id',
@@ -97,17 +116,14 @@ let stor = AspNetData.createStore({
             onBeforeSend: (operation: string, ajaxSettings : {data? : any}) => {
                 if (operation == "load")
                 {
-                    ajaxSettings.data.user_context_user_id = 123;
-                    ajaxSettings.data.user_context_org_id = 321;
-                    ajaxSettings.data.user_context_year = 2020;
-                    ajaxSettings.data.user_context = cntx;
-                    ajaxSettings.data.user_context2 = cntx2;
+                    cntx.fillObjAsField(ajaxSettings.data);
                 }
             },
             onLoaded: (result: Array<any>) => {
 
                 return result
-            }
+            },
+            loadMode: "processed"
         });
 
 class RawRow {
@@ -130,7 +146,10 @@ class RawRow {
         DxFilterBuilderPopup,
         DxScrolling,
         DxRemoteOperations,
-        DxGroupPanel
+        DxGroupPanel,
+        DxPager,
+        DxGrouping,
+        DxPaging
     }
 })
 export default class TestGrid extends Vue {

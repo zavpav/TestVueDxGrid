@@ -20,7 +20,9 @@ namespace TestApi.Dx
         {
             var source = _dbContext.Documents;
 
-            return Json(await DataSourceLoader.LoadAsync(source, loadOptions));
+            var data = await DataSourceLoader.LoadAsync(source, loadOptions);
+
+            return Json(data);
         }
     }
 }

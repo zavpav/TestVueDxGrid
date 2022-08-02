@@ -45,8 +45,15 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpLogging(logging =>
 {
-    logging.LoggingFields = HttpLoggingFields.All;
-    //logging.RequestBodyLogLimit = 4096;
+    logging.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestBody |
+           Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestPath |
+           Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestQuery |
+           Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestPropertiesAndHeaders |
+           Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestHeaders |
+           Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestScheme |
+           Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestTrailers |
+           Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestMethod;
+           //logging.RequestBodyLogLimit = 4096;
     //logging.ResponseBodyLogLimit = 1;
 });
 
